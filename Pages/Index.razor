@@ -1,0 +1,37 @@
+﻿@page "/"
+
+<h1>Villa Rumipal</h1>
+<h2>Imagenes Satelitales Landsat 8</h2>
+
+<EditForm Model="@model">
+    <label>Fecha: </label>
+    <InputDate type="date" 
+                @bind-Value="@SelectedDate" 
+                @onblur="DisplayLoading" />
+    <button class="btn btn-primary" @onclick="DisplayImage">Ver</button>
+</EditForm>
+<br>
+<div>
+    <img id="satelliteImage" 
+         src="@SatelliteSource" 
+         width="500"
+         height="500"
+         alt="Imagen Satelital de Villa Rumipal">
+</div>
+
+@code {
+    private IndexModel model = new IndexModel();
+    public DateTime SelectedDate = DateTime.Now;
+    public string SatelliteSource = $"https://api.nasa.gov/planetary/earth/imagery/?lon=-64.481&lat=-32.165&cloud_score=False&api_key=X2Gv8aiujUd1rXOk8XCDcmgIWCo9j3LVUVzAIWbd&dim=0.08";
+
+    private void DisplayImage()
+    {
+        var date = SelectedDate.ToString("yyyy-MM-dd");
+        SatelliteSource = $"https://api.nasa.gov/planetary/earth/imagery/?lon=-64.481&lat=-32.165&date={date}&cloud_score=False&api_key=X2Gv8aiujUd1rXOk8XCDcmgIWCo9j3LVUVzAIWbd&dim=0.08";
+    }
+
+    private void DisplayLoading()
+    {
+        SatelliteSource = "/img/loading.gif";
+    }
+}
